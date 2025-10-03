@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\AdminProfileController;
+use App\Http\Controllers\Frontend\IndexController;
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -14,10 +17,6 @@ use App\Http\Controllers\Backend\AdminProfileController;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::group(['prefix'=> 'admin', 'middleware'=>['admin:admin']], function(){
 	Route::get('/login', [AdminController::class, 'loginForm']);
@@ -38,11 +37,9 @@ Route::get('/admin/change/password', [AdminProfileController::class, 'AdminChang
 Route::post('/update/change/password', [AdminProfileController::class, 'AdminUpdateChangePassword'])->name('update.change.password');
 
 
-
-
-
-
-
 Route::middleware(['auth:sanctum,web', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+
+Route::get('/', [IndexController::class, 'index']);
