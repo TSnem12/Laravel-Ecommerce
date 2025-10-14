@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\Backend\AdminProfileController;
+use App\Http\Controllers\Backend\BrandController;
 use App\Http\Controllers\Frontend\IndexController;
 
 
@@ -43,3 +44,8 @@ Route::middleware(['auth:sanctum,web', 'verified'])->get('/dashboard', function 
 
 
 Route::get('/', [IndexController::class, 'index']);
+Route::get('/user/logout', [IndexController::class, 'UserLogout'])->name('user.logout');
+Route::get('/user/profile', [IndexController::class, 'UserProfile'])->name('user.profile');
+Route::post('/user/profile/store', [IndexController::class, 'UserProfileStore'])->name('user.profile.store');
+Route::get('/user/change/password', [IndexController::class, 'UserChangePassword'])->name('change.password');
+Route::post('/user/update/password', [IndexController::class, 'UserUpdatePassword'])->name('update.password');
