@@ -295,53 +295,65 @@ My Checkout
 
 
 
- 
- <script type="text/javascript">
-      $(document).ready(function() {
-        $('select[name="division_id"]').on('change', function(){
-            var division_id = $(this).val();
-            if(division_id) {
-                $.ajax({
-                    url: "{{  url('/district-get/ajax') }}/"+division_id,
-                    type:"GET",
-                    dataType:"json",
-                    success:function(data) {
-                    	$('select[name="state_id"]').empty(); 
-                       var d =$('select[name="district_id"]').empty();
-                          $.each(data, function(key, value){
-                              $('select[name="district_id"]').append('<option value="'+ value.id +'">' + value.district_name + '</option>');
-                          });
-                    },
-                });
-            } else {
-                alert('danger');
-            }
-        });
 
-
-
- $('select[name="district_id"]').on('change', function(){
-            var district_id = $(this).val();
-            if(district_id) {
-                $.ajax({
-                    url: "{{  url('/state-get/ajax') }}/"+district_id,
-                    type:"GET",
-                    dataType:"json",
-                    success:function(data) {
-                       var d =$('select[name="state_id"]').empty();
-                          $.each(data, function(key, value){
-                              $('select[name="state_id"]').append('<option value="'+ value.id +'">' + value.state_name + '</option>');
-                          });
-                    },
-                });
-            } else {
-                alert('danger');
-            }
-        });
- 
-
-    });
-    </script>
+<script type="text/javascript">
+	$(document).ready(function() {
+	
+		// عند تغيير الـ Division → نجيب الـ Districts
+		$('select[name="division_id"]').on('change', function(){
+			var division_id = $(this).val();
+			if(division_id) {
+				$.ajax({
+					url: "/district-get/ajax/" + division_id,
+					type: "GET",
+					dataType: "json",
+					success: function(data){
+						var districtSelect = $('select[name="district_id"]');
+						districtSelect.empty(); // فرغ الخيارات القديمة
+						districtSelect.append('<option value="" selected disabled>Select District</option>');
+						
+						var stateSelect = $('select[name="state_id"]');
+						stateSelect.empty();
+						stateSelect.append('<option value="" selected disabled>Select State</option>');
+	
+						$.each(data, function(key, value){
+							districtSelect.append('<option value="'+ value.id +'">' + value.district_name + '</option>');
+						});
+					},
+					error: function(err){
+						console.log(err);
+					}
+				});
+			}
+		});
+	
+		// عند تغيير الـ District → نجيب الـ States
+		$('select[name="district_id"]').on('change', function(){
+			var district_id = $(this).val();
+			if(district_id) {
+				$.ajax({
+					url: "/state-get/ajax/" + district_id,
+					type: "GET",
+					dataType: "json",
+					success: function(data){
+						var stateSelect = $('select[name="state_id"]');
+						stateSelect.empty(); // فرغ الخيارات القديمة
+						stateSelect.append('<option value="" selected disabled>Select State</option>');
+	
+						$.each(data, function(key, value){
+							stateSelect.append('<option value="'+ value.id +'">' + value.state_name + '</option>');
+						});
+					},
+					error: function(err){
+						console.log(err);
+					}
+				});
+			}            
+						
+		});
+	
+	});
+	</script>
 
 
 @endsection
